@@ -44,4 +44,9 @@ export default class TeachersController {
     }
   }
 
+  public async index({}: HttpContextContract) {
+    const all = await Teacher.all();
+
+    return all;
+  }
 }
