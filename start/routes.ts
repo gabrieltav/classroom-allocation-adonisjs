@@ -29,3 +29,4 @@ Route.delete('/student/:id', 'StudentsController.destroy');
 
 //Routers Teachers
 Route.post("/teacher", "TeachersController.create");
+Route.get('/teacher/:id', 'TeachersController.show');
