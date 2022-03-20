@@ -11,9 +11,7 @@ export default class StudentsController {
 
       return student;
     } catch (error) {
-      throw new NotFoundException(
-        "Student already registered"
-      );
+      throw new NotFoundException("Student already registered");
     }
   }
 
@@ -24,6 +22,7 @@ export default class StudentsController {
       if (!student) {
         throw new NotFoundException("Student not found!");
       }
+      student?.load("classes");
       return student;
     } catch (error) {
       throw new NotFoundException("Student not found!");
