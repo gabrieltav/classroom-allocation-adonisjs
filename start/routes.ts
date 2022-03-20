@@ -32,3 +32,4 @@ Route.post("/teacher", "TeachersController.create");
 Route.put('/teacher/:id', 'TeachersController.update');
 Route.get('/teachers', 'TeachersController.index');
 Route.get('/teacher/:id', 'TeachersController.show');
+Route.delete('/teacher/:id', 'TeachersController.destroy');
