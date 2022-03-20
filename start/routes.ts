@@ -21,8 +21,11 @@
 import Route from '@ioc:Adonis/Core/Route'
 
 //Routers Students
-Route.post("/students", "StudentsController.create");
+Route.post("/student", "StudentsController.create");
 Route.put('/student/:id', 'StudentsController.update');
 Route.get('/students', 'StudentsController.index');
 Route.get('/student/:id', 'StudentsController.show');
 Route.delete('/student/:id', 'StudentsController.destroy');
+
+//Routers Teachers
+Route.post("/teacher", "TeachersController.create");
