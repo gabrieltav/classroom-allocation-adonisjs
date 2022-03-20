@@ -1,9 +1,21 @@
 import { DateTime } from "luxon";
-import { BaseModel, column } from "@ioc:Adonis/Lucid/Orm";
+import {
+  BaseModel,
+  BelongsTo,
+  belongsTo,
+  column,
+  ManyToMany,
+  manyToMany,
+} from "@ioc:Adonis/Lucid/Orm";
+import Student from "./Student";
+import Teacher from "./Teacher";
 
 export default class Class extends BaseModel {
   @column({ isPrimary: true })
   public id: number;
+
+  @column()
+  public teacherId: string;
 
   @column()
   public room_number: number;
@@ -19,4 +31,13 @@ export default class Class extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime;
+
+  @manyToMany(() => Student, {
+    pivotTable: "class_students",
+    pivotTimestamps: true,
+  })
+  public students: ManyToMany<typeof Student>;
+
+  @belongsTo(() => Teacher, { foreignKey: "teacherId" })
+  public teacher: BelongsTo<typeof Teacher>;
 }

@@ -1,11 +1,11 @@
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 import NotFoundException from "App/Exceptions/NotFoundException";
 import Teacher from "App/Models/Teacher";
-import UserValidator from "App/Validators/UserValidator";
+import TeacherValidator from "App/Validators/TeacherValidator";
 
 export default class TeachersController {
   public async create({ request }: HttpContextContract) {
-    const dto = await request.validate(UserValidator);
+    const dto = await request.validate(TeacherValidator);
     try {
       const teacher = await Teacher.create(dto);
 
@@ -29,7 +29,7 @@ export default class TeachersController {
   }
 
   public async update(ctx: HttpContextContract) {
-    const dto = await ctx.request.validate(UserValidator);
+    const dto = await ctx.request.validate(TeacherValidator);
     const { id } = ctx.params;
 
     try {
