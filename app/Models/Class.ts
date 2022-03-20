@@ -15,7 +15,7 @@ export default class Class extends BaseModel {
   public id: number;
 
   @column()
-  public teacherId: string;
+  public teacherId: number;
 
   @column()
   public room_number: number;
