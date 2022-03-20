@@ -7,9 +7,9 @@ export default class TeachersController {
   public async create({ request }: HttpContextContract) {
     const dto = await request.validate(UserValidator);
     try {
-      const student = await Teacher.create(dto);
+      const teacher = await Teacher.create(dto);
 
-      return student;
+      return teacher;
     } catch (error) {
       throw new NotFoundException("Teacher already registered");
     }
@@ -18,13 +18,30 @@ export default class TeachersController {
   public async show(ctx: HttpContextContract) {
     const { id } = ctx.params;
     try {
-      const student = await Teacher.findOrFail(id);
-      if (!student) {
+      const teacher = await Teacher.findOrFail(id);
+      if (!teacher) {
         throw new NotFoundException("Teacher not found!");
       }
-      return student;
+      return teacher;
     } catch (error) {
       throw new NotFoundException("Teacher not found!");
     }
   }
+
+  public async update(ctx: HttpContextContract) {
+    const dto = await ctx.request.validate(UserValidator);
+    const { id } = ctx.params;
+
+    try {
+      const teacher = await Teacher.find(id);
+
+      teacher?.merge(dto);
+      await teacher?.save();
+
+      return teacher;
+    } catch (error) {
+      throw new NotFoundException("Teacher not found!");
+    }
+  }
+
 }
