@@ -13,11 +13,11 @@ export default class ClasseStudentsController {
 
     const { student_id } = ctx.request.only(["student_id"]);
 
-    const totalAlunos = await Database.from("class_students")
+    const totalStudents = await Database.from("class_students")
       .select("*")
       .where("class_id", classe?.id);
 
-    if (totalAlunos.length < classe.capacity) {
+    if (totalStudents.length < classe.capacity) {
       await classe?.related("students").attach([...student_id]);
 
       await classe?.save();
@@ -51,8 +51,6 @@ export default class ClasseStudentsController {
       return classe;
     }
 
-    throw new AuthorizationException(
-      "The room has reached its maximum student capacity."
-    );
+    throw new NotFoundException("This student does not belong in this class");
   }
 }
