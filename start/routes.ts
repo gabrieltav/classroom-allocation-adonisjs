@@ -18,18 +18,26 @@
 |
 */
 
-import Route from '@ioc:Adonis/Core/Route'
+import Route from "@ioc:Adonis/Core/Route";
 
 //Routers Students
 Route.post("/student", "StudentsController.create");
-Route.put('/student/:id', 'StudentsController.update');
-Route.get('/students', 'StudentsController.index');
-Route.get('/student/:id', 'StudentsController.show');
-Route.delete('/student/:id', 'StudentsController.destroy');
+Route.put("/student/:id", "StudentsController.update");
+Route.get("/students", "StudentsController.index");
+Route.get("/student/:id", "StudentsController.show");
+Route.delete("/student/:id", "StudentsController.destroy");
 
 //Routers Teachers
 Route.post("/teacher", "TeachersController.create");
-Route.put('/teacher/:id', 'TeachersController.update');
-Route.get('/teachers', 'TeachersController.index');
-Route.get('/teacher/:id', 'TeachersController.show');
-Route.delete('/teacher/:id', 'TeachersController.destroy');
+Route.put("/teacher/:id", "TeachersController.update");
+Route.get("/teachers", "TeachersController.index");
+Route.get("/teacher/:id", "TeachersController.show");
+Route.delete("/teacher/:id", "TeachersController.destroy");
+
+//Routes Classes
+Route.put("/classadd/:id", "ClasseStudentsController.addStudent");
+Route.put("/classremove/:id", "ClasseStudentsController.removeStudent");
+Route.get("/classes", "ClassesController.findAll");
+Route.group(() => {
+  Route.resource("teacher.class", "ClassesController").apiOnly();
+});

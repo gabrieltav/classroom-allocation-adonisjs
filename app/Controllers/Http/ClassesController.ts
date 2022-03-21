@@ -1,17 +1,17 @@
 import { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 import Class from "App/Models/Class";
 import Teacher from "App/Models/Teacher";
-import { TeacherService } from "App/services/TeacherService";
+import { ClassStudentService } from "App/Services/ClassStudentService";
 import ClassValidator from "App/Validators/ClassValidator";
 import NotFoundException from "App/Exceptions/NotFoundException";
 
 export default class ClassesController {
-  private teacherService = new TeacherService();
+  private classStudentService = new ClassStudentService();
 
   public async store(ctx: HttpContextContract) {
     const { teacher_id } = ctx.params;
     const dto = await ctx.request.validate(ClassValidator);
-    const classe = await this.teacherService.createClass(teacher_id, dto);
+    const classe = await this.classStudentService.createClass(teacher_id, dto);
 
     return classe;
   }
@@ -19,15 +19,25 @@ export default class ClassesController {
   public async index(ctx: HttpContextContract) {
     const { teacher_id } = ctx.params;
     const teacher = await Teacher.firstOrFail(teacher_id);
+    const classe = await Class.query()
+      .where("teacher_id", teacher.id)
+      .preload("teacher")
+      .preload("students");
 
     await teacher.load("classes");
-    return ctx.response.json(teacher.classes);
+    return ctx.response.json({ classe });
   }
 
   public async show({ params }: HttpContextContract) {
     const classe = await Class.findOrFail(params.id);
 
     return classe;
+  }
+
+  public async findAll({}: HttpContextContract) {
+    const all = await Class.all();
+
+    return all;
   }
 
   public async update(ctx: HttpContextContract) {
@@ -43,19 +53,21 @@ export default class ClassesController {
       return classe;
     }
 
-    throw new NotFoundException("Esta sala não pertence a este professor");
+    throw new NotFoundException("This room does not belong to this teacher");
   }
 
   public async destroy(ctx: HttpContextContract) {
     const { teacher_id, id } = ctx.params;
     const classe = await Class.findOrFail(id);
+    const teacher = await Teacher.findOrFail(teacher_id);
 
-    if (classe.teacherId === teacher_id) {
-      await classe?.delete();
+    if (classe.teacherId === teacher.id) {
+      console.log("caindo aqui..");
+      await classe.delete();
       return ctx.response
-        .status(204)
-        .json({ message: "Sala daeletada com sucesso" });
+        .status(200)
+        .json({ message: "Room successfully deleted" });
     }
-    throw new NotFoundException("Esta sala não pertence a este professor");
+    throw new NotFoundException("This room does not belong to this teacher");
   }
 }

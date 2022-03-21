@@ -14,7 +14,7 @@ export default class Class extends BaseModel {
   @column({ isPrimary: true })
   public id: number;
 
-  @column()
+  @column({columnName:"teacher_id"})
   public teacherId: number;
 
   @column()

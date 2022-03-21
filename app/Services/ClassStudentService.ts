@@ -2,7 +2,7 @@ import AuthorizationException from "App/Exceptions/AuthorizationException";
 import NotFoundException from "App/Exceptions/NotFoundException";
 import Teacher from "App/Models/Teacher";
 
-export class TeacherService {
+export class ClassStudentService {
   public async getTeacherFullView(teacherId: string) {
     try {
       const teacher = await Teacher.query()
