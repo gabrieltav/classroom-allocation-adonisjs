@@ -35,8 +35,8 @@ Route.get("/teacher/:id", "TeachersController.show");
 Route.delete("/teacher/:id", "TeachersController.destroy");
 
 //Routes Classes
-Route.put("/classadd/:id", "ClasseStudentsController.addStudent");
-Route.put("/classremove/:id", "ClasseStudentsController.removeStudent");
+Route.put("/class/add/:id", "ClasseStudentsController.addStudent");
+Route.put("/class/remove/:id", "ClasseStudentsController.removeStudent");
 Route.get("/classes", "ClassesController.findAll");
 Route.group(() => {
   Route.resource("teacher.class", "ClassesController").apiOnly();
