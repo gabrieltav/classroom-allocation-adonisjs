@@ -32,6 +32,22 @@ export default class ClasseStudentsController {
     );
   }
 
+  public async classStudent(ctx: HttpContextContract){
+    const {id} = ctx.params;
+    const student = await Student.find(id)
+
+    if(!student) throw new NotFoundException("Aluno não encontrado")
+
+    const studentClass = await Database.from("class_students")
+                    .select("*")
+                    .where("student_id", student?.id);
+
+    if(studentClass.length===0) 
+      throw new NotFoundException("Este aluno não esta alocado em nenhuma classe")
+    
+    return studentClass;
+  }
+
   public async removeStudent(ctx: HttpContextContract) {
     const { id } = ctx.params;
 

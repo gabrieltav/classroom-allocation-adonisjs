@@ -44,10 +44,15 @@ export default class TeachersController {
     }
   }
 
-  public async index({}: HttpContextContract) {
-    const all = await Teacher.all();
+  public async index(ctx: HttpContextContract) {
+    const teachers = await Teacher.all();
 
-    return all;
+    return ctx.response
+    .status(200)
+    .json({
+      message:"Teachers found successfully",
+      teachers
+    });
   }
 
   public async destroy(ctx: HttpContextContract) {

@@ -45,10 +45,15 @@ export default class StudentsController {
     }
   }
 
-  public async index({}: HttpContextContract) {
-    const all = await Student.all();
+  public async index(ctx: HttpContextContract) {
+    const students = await Student.all();
 
-    return all;
+    return ctx.response
+    .status(200)
+    .json({
+      message:"Students found successfully",
+      students
+    });
   }
 
   public async destroy(ctx: HttpContextContract) {

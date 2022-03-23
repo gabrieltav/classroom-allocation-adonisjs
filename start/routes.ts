@@ -26,6 +26,7 @@ Route.put("/student/:id", "StudentsController.update");
 Route.get("/students", "StudentsController.index");
 Route.get("/student/:id", "StudentsController.show");
 Route.delete("/student/:id", "StudentsController.destroy");
+Route.get("student/:id/class","ClasseStudentsController.classStudent")
 
 //Routers Teachers
 Route.post("/teacher", "TeachersController.create");
@@ -37,6 +38,8 @@ Route.delete("/teacher/:id", "TeachersController.destroy");
 //Routes Classes
 Route.put("/class/add/:id", "ClasseStudentsController.addStudent");
 Route.put("/class/remove/:id", "ClasseStudentsController.removeStudent");
+// Route.put("/teacher/:teacher_id/class/:id", "ClasseStudentsController.update");
+
 Route.get("/classes", "ClassesController.findAll");
 Route.group(() => {
   Route.resource("teacher.class", "ClassesController").apiOnly();

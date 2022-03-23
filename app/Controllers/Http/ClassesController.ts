@@ -10,7 +10,13 @@ export default class ClassesController {
 
   public async store(ctx: HttpContextContract) {
     const { teacher_id } = ctx.params;
+
+    const teacher = await Teacher.find(teacher_id)
+
+    if(!teacher) throw new NotFoundException("Teacher not found")
+
     const dto = await ctx.request.validate(ClassValidator);
+    
     const classe = await this.classStudentService.createClass(teacher_id, dto);
 
     return classe;
@@ -18,7 +24,11 @@ export default class ClassesController {
 
   public async index(ctx: HttpContextContract) {
     const { teacher_id } = ctx.params;
-    const teacher = await Teacher.firstOrFail(teacher_id);
+
+    const teacher = await Teacher.find(teacher_id)
+
+    if(!teacher) throw new NotFoundException("Teacher not found")
+
     const classe = await Class.query()
       .where("teacher_id", teacher.id)
       .preload("teacher")
@@ -29,15 +39,22 @@ export default class ClassesController {
   }
 
   public async show({ params }: HttpContextContract) {
-    const classe = await Class.findOrFail(params.id);
+    const classe = await Class.find(params.id);
+
+    if(!classe) throw new NotFoundException("Class not found")
 
     return classe;
   }
 
-  public async findAll({}: HttpContextContract) {
-    const all = await Class.all();
+  public async findAll(ctx: HttpContextContract) {
+    const classes = await Class.all();
 
-    return all;
+    return ctx.response
+    .status(200)
+    .json({
+      message:"Classes found successfully",
+      classes
+    });
   }
 
   public async update(ctx: HttpContextContract) {
@@ -45,12 +62,23 @@ export default class ClassesController {
 
     const data = await ctx.request.validate(ClassValidator);
 
+    const teacher = await Teacher.find(teacher_id)
+    if(!teacher) throw new NotFoundException("Teacher not found")
+
     const classe = await Class.find(id);
-    if (classe?.teacherId === teacher_id) {
+    if(!classe) throw new NotFoundException("Class not found")
+
+    if (classe?.teacherId === teacher?.id) {
+      
       classe?.merge(data);
       await classe?.save();
 
-      return classe;
+      return ctx.response
+        .status(200)
+        .json({
+          message:"Class updated successfully",
+          classe
+        });
     }
 
     throw new NotFoundException("This room does not belong to this teacher");
