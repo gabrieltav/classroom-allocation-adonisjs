@@ -90,7 +90,7 @@ export default class ClassesController {
     const teacher = await Teacher.findOrFail(teacher_id);
 
     if (classe.teacherId === teacher.id) {
-      console.log("caindo aqui..");
+      //console.log("caindo aqui..");
       await classe.delete();
       return ctx.response
         .status(200)

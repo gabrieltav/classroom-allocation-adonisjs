@@ -58,12 +58,17 @@ export default class TeachersController {
   public async destroy(ctx: HttpContextContract) {
     const { id } = ctx.params;
 
+    const teacher = await Teacher.findOrFail(id);
+
+    if(!teacher) throw new NotFoundException("Teacher not found!")
+
     try {
-      await Teacher.query().where({ id: id }).delete();
+      await teacher.delete();
       return ctx.response
-        .status(204)
+        .status(200)
         .json({ message: "Teacher successfully deleted" });
-    } catch (error) {
+
+    }  catch (error) {
       throw new NotFoundException("Teacher not found!");
     }
   }

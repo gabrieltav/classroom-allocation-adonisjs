@@ -59,12 +59,17 @@ export default class StudentsController {
   public async destroy(ctx: HttpContextContract) {
     const { id } = ctx.params;
 
+    const student = await Student.findOrFail(id);
+
+    if(!student) throw new NotFoundException("Student not found!")
+
     try {
-      await Student.query().where({ id: id }).delete();
+      await student.delete();
       return ctx.response
-        .status(204)
+        .status(200)
         .json({ message: "Student successfully deleted" });
-    } catch (error) {
+
+    }  catch (error) {
       throw new NotFoundException("Student not found!");
     }
   }
